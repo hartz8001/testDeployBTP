@@ -23,6 +23,7 @@ jobs:
 
       - name: Install Cloud Foundry CLI
         run: |
+          # Get the latest release download URL for Linux
           CF_CLI_URL=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest \
             | grep "browser_download_url" \
             | grep "linux_x86-64.tgz" \
@@ -34,16 +35,17 @@ jobs:
           FILE_NAME=$(basename "$CF_CLI_URL")
           tar -xvzf "$FILE_NAME"
 
-          # Remove any existing broken symlink
-          if [ -L /usr/local/bin/cf ] || [ -f /usr/local/bin/cf ]; then
+          # Clean any existing 'cf' binary or broken symlink
+          if [ -e /usr/local/bin/cf ] || [ -L /usr/local/bin/cf ]; then
+            echo "Removing existing cf binary or symlink..."
             sudo rm -f /usr/local/bin/cf
           fi
 
-          # Move and set permissions
+          # Move new binary and make it executable
           sudo mv cf /usr/local/bin/cf
           sudo chmod +x /usr/local/bin/cf
 
-          # Confirm installation
+          echo "✅ CF CLI installed:"
           cf version
 
       - name: Deploy to SAP BTP
