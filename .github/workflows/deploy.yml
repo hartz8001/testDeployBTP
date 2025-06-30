@@ -23,9 +23,9 @@ jobs:
 
       - name: Install Cloud Foundry CLI
         run: |
-          curl -LO https://packages.cloudfoundry.org/stable/cf-cli_8.0.0_linux_x86-64.tgz
-          tar -xvzf cf-cli_8.0.0_linux_x86-64.tgz
-          sudo mv cf /usr/local/bin
+          curl -LO https://github.com/cloudfoundry/cli/releases/download/v8.14.1/cf8-cli_8.14.1_linux_x86-64.tgz
+          tar -xvzf cf8-cli-installer_8.1.0_linux_x86-64.tgz
+          sudo mv cf8-cli-installer_8.1.0_linux_x86-64/cf /usr/local/bin
 
       - name: Deploy to SAP BTP
         env:
