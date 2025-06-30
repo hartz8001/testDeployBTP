@@ -23,13 +23,19 @@ jobs:
 
       - name: Install Cloud Foundry CLI
         run: |
-          curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest \
+          CF_CLI_URL=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest \
             | grep "browser_download_url" \
             | grep "linux_x86-64.tgz" \
-            | cut -d '"' -f 4 \
-            | xargs curl -LO
-          tar -xvzf cf-cli-*-linux_x86-64.tgz
-          sudo mv cf-cli-*/cf /usr/local/bin
+            | cut -d '"' -f 4)
+
+          echo "Downloading: $CF_CLI_URL"
+          curl -LO "$CF_CLI_URL"
+
+          FILE_NAME=$(basename "$CF_CLI_URL")
+          tar -xvzf "$FILE_NAME"
+
+          # The extracted folder may vary — search for cf and move it
+          find . -type f -name cf -exec sudo mv {} /usr/local/bin/cf \;
 
       - name: Deploy to SAP BTP
         env:
