@@ -1,0 +1,8 @@
+applications:
+  - name: my-java-btp-app
+    memory: 1G
+    instances: 1
+    path: target/demo-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - java_buildpack
+    random-route: true
