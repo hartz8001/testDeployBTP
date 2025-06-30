@@ -28,14 +28,19 @@ jobs:
             | grep "linux_x86-64.tgz" \
             | cut -d '"' -f 4)
 
-          echo "Downloading: $CF_CLI_URL"
+          echo "Downloading CF CLI from: $CF_CLI_URL"
           curl -LO "$CF_CLI_URL"
 
           FILE_NAME=$(basename "$CF_CLI_URL")
           tar -xvzf "$FILE_NAME"
 
-          # The extracted folder may vary — search for cf and move it
-          find . -type f -name cf -exec sudo mv {} /usr/local/bin/cf \;
+          # Locate and move the 'cf' binary to /usr/local/bin
+          CF_PATH=$(find . -type f -name cf | head -n 1)
+          echo "Found CF CLI binary at: $CF_PATH"
+          sudo mv "$CF_PATH" /usr/local/bin/cf
+
+          # Confirm installation
+          cf version
 
       - name: Deploy to SAP BTP
         env:
