@@ -34,11 +34,16 @@ jobs:
           FILE_NAME=$(basename "$CF_CLI_URL")
           tar -xvzf "$FILE_NAME"
 
-          # The extracted file includes a cf binary directly
+          # Remove any existing broken symlink
+          if [ -L /usr/local/bin/cf ] || [ -f /usr/local/bin/cf ]; then
+            sudo rm -f /usr/local/bin/cf
+          fi
+
+          # Move and set permissions
           sudo mv cf /usr/local/bin/cf
           sudo chmod +x /usr/local/bin/cf
 
-          # Confirm it's installed
+          # Confirm installation
           cf version
 
       - name: Deploy to SAP BTP
