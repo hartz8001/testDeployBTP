@@ -34,12 +34,11 @@ jobs:
           FILE_NAME=$(basename "$CF_CLI_URL")
           tar -xvzf "$FILE_NAME"
 
-          # Locate and move the 'cf' binary to /usr/local/bin
-          CF_PATH=$(find . -type f -name cf | head -n 1)
-          echo "Found CF CLI binary at: $CF_PATH"
-          sudo mv "$CF_PATH" /usr/local/bin/cf
+          # The extracted file includes a cf binary directly
+          sudo mv cf /usr/local/bin/cf
+          sudo chmod +x /usr/local/bin/cf
 
-          # Confirm installation
+          # Confirm it's installed
           cf version
 
       - name: Deploy to SAP BTP
