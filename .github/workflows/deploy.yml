@@ -34,13 +34,14 @@ jobs:
           FILE_NAME=$(basename "$CF_CLI_URL")
           tar -xvzf "$FILE_NAME"
 
-          # Remove any file or symlink at /usr/local/bin/cf, even if dangling
-          sudo rm -rf /usr/local/bin/cf
+          # Use sudo to force-remove the existing dangling symlink or file
+          sudo rm -f /usr/local/bin/cf
 
-          # Move and set executable permission
+          # Move the new binary and set executable permission
           sudo mv cf /usr/local/bin/cf
           sudo chmod +x /usr/local/bin/cf
 
+          # Verify installation
           cf version
 
       - name: Deploy to SAP BTP
